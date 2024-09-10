@@ -133,5 +133,12 @@ impl INode for Main {
         self.mob_scene = load("res://Mob.tscn");
         self.music = Some(self.base().get_node_as("Music"));
         self.death_sound = Some(self.base().get_node_as("DeathSound"));
+
+        // Connect the new game and game over signals
+        let mut hud = self.base().get_node_as::<Hud>("Hud");
+        hud.connect("start_game".into(), self.base_mut().callable("new_game"));
+
+        let mut player = self.base().get_node_as::<player::Player>("Player");
+        player.connect("hit".into(), self.base_mut().callable("game_over"));
     }
 }
